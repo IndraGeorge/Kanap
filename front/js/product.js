@@ -65,50 +65,64 @@ const addBasket = () => {
 
     button.addEventListener('click', () => {
 
+        // variable colors and quantity
         let select = document.getElementById("colors");
-         
-        const cart = Object.assign({}, productData, {
-            colors: `${select.value}`,
-            quantity: 1,
-        })
-       
-        let basket = JSON.parse(localStorage.getItem("basketClient"))
+        let choiceQuantity = document.getElementById("quantity");
 
-        if (basket == null) {
-            basket = [];
-            basket.push(cart)
-            console.table(basket)
-            localStorage.setItem("basketClient", JSON.stringify(basket));
+        // condition if color and quantity  selected
+        if (select.value != "" &&
+            choiceQuantity != 0  &&
+            choiceQuantity.value > 0 &&
+            choiceQuantity.value < 100
+        ) {
 
+            //new array of productData
+            const cart = Object.assign({}, productData, {
+                colors: `${select.value}`,
+                quantity: 1,
+            })
 
-        } else if (basket != null) {
-            for (i = 0; i < basket.length; i++) {
-                if (basket[i]._id == productData._id && basket[i].colors == select.value) {
-                    return (
-                        basket[i].quantity++,
-                        console.log("quantity++"),
-                        localStorage.setItem("basketClient", JSON.stringify(basket)),
-                        (basket = JSON.parse(localStorage.getItem("basketClient")))
-                    )
+            // variable local storage
+            let basket = JSON.parse(localStorage.getItem("basketClient"))
+
+            // condition if basket contains nothing
+            if (basket == null) {
+                basket = [];
+                basket.push(cart)
+                console.table(basket)
+                localStorage.setItem("basketClient", JSON.stringify(basket));
+
+                // condition if basket contains items
+            } else if (basket != null) {
+                for (i = 0; i < basket.length; i++) {
+                    if (basket[i]._id == productData._id &&
+                        basket[i].colors == select.value
+                    ) {
+                        return (
+                            basket[i].quantity++,
+                            console.log("quantity++"),
+                            localStorage.setItem("basketClient", JSON.stringify(basket)),
+                            (basket = JSON.parse(localStorage.getItem("basketClient")))
+                        )
+                    }
+                }
+                for (i = 0; i < basket.length; i++) {
+                    if (basket[i]._id == productData._id &&
+                        basket[i].colors != select.value ||
+                        basket[i]._id != productData._id
+                    ) {
+                        return (
+                            console.log("new"),
+                            basket.push(cart),
+                            localStorage.setItem("basketClient", JSON.stringify(basket)),
+                            (basket = JSON.parse(localStorage.getItem("basketClient")))
+                        )
+                    }
                 }
             }
-            for (i = 0; i < basket.length; i++) {
-                if (basket[i]._id == productData._id && basket[i].colors != select.value
-                    || basket[i]._id != productData._id) {
-                    return (
-                        console.log("new"),
-                        basket.push(cart),
-                        localStorage.setItem("basketClient", JSON.stringify(basket)),
-                        (basket = JSON.parse(localStorage.getItem("basketClient")))
-                    )
-                }
-            }
-           
         }
 
-       
-
-    });
+    })
 
     return (basket = JSON.parse(localStorage.getItem("basketClient")))
 
