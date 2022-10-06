@@ -1,3 +1,4 @@
+
 // Url SearchParams
 const id = new URLSearchParams(window.location.search).get("id");
 console.log(id);
@@ -47,11 +48,12 @@ const productDisplay = async () => {
         document
             .getElementById("colors")
             .innerHTML += `<option value="${productColors}">${productColors}</option>`
-        console.log(productColors)
+
 
     }
 
     addBasket(productData);
+
 };
 
 
@@ -61,15 +63,56 @@ productDisplay();
 
 const addBasket = () => {
 
-    button.addEventListener('click', function () {
+    button.addEventListener('click', () => {
 
-        let basket = JSON.parse(localStorage.getItem("kanap")); 
-        localStorage.setItem("kanap", JSON.stringify(basket)); 
-        console.log(basket);
-        basket.push(productData)
+        let select = document.getElementById("colors");
+         
+        const cart = Object.assign({}, productData, {
+            colors: `${select.value}`,
+            quantity: 1,
+        })
+       
+        let basket = JSON.parse(localStorage.getItem("basketClient"))
+
+        if (basket == null) {
+            basket = [];
+            basket.push(cart)
+            console.table(basket)
+            localStorage.setItem("basketClient", JSON.stringify(basket));
+
+
+        } else if (basket != null) {
+            for (i = 0; i < basket.length; i++) {
+                if (basket[i]._id == productData._id && basket[i].colors == select.value) {
+                    return (
+                        basket[i].quantity++,
+                        console.log("quantity++"),
+                        localStorage.setItem("basketClient", JSON.stringify(basket)),
+                        (basket = JSON.parse(localStorage.getItem("basketClient")))
+                    )
+                }
+            }
+            for (i = 0; i < basket.length; i++) {
+                if (basket[i]._id == productData._id && basket[i].colors != select.value
+                    || basket[i]._id != productData._id) {
+                    return (
+                        console.log("new"),
+                        basket.push(cart),
+                        localStorage.setItem("basketClient", JSON.stringify(basket)),
+                        (basket = JSON.parse(localStorage.getItem("basketClient")))
+                    )
+                }
+            }
+           
+        }
 
        
 
-    })
+    });
 
-} 
+    return (basket = JSON.parse(localStorage.getItem("basketClient")))
+
+}
+
+
+
