@@ -3,13 +3,6 @@
 const id = new URLSearchParams(window.location.search).get("id");
 console.log(id);
 
-// array product
-let productData = [];
-
-// button add to cart
-let button = document.getElementById("addToCart");
-
-
 // fetch product 
 const loadingPageProduct = async () => {
     await fetch(`http://localhost:3000/api/products/${id}`)
@@ -19,6 +12,12 @@ const loadingPageProduct = async () => {
             return productData
         })
 }
+
+// array product
+let productData = [];
+
+// button add to cart
+let button = document.getElementById("addToCart");
 
 
 // page product containing details of product
@@ -67,20 +66,21 @@ const addBasket = () => {
 
         // variable colors and quantity
         let select = document.getElementById("colors");
-        let choiceQuantity = document.getElementById("quantity");
+        let quantity = document.getElementById("quantity");
 
         // condition if color and quantity  selected
         if (select.value != "" &&
-            choiceQuantity != 0  &&
-            choiceQuantity.value > 0 &&
-            choiceQuantity.value < 100
+            quantity != 0  &&
+            quantity.value > 0 &&
+            quantity.value < 100
         ) {
 
             //new array of productData
-            const cart = Object.assign({}, productData, {
-                colors: `${select.value}`,
-                quantity: 1,
-            })
+            const cart =  {
+                _id : productData._id,
+                colors: select.value,
+                quantity: quantity.value,
+            }
 
             // variable local storage
             let basket = JSON.parse(localStorage.getItem("basketClient"))
