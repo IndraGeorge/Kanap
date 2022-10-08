@@ -19,7 +19,6 @@ let productData = [];
 // button add to cart
 let button = document.getElementById("addToCart");
 
-
 // page product containing details of product
 const productDisplay = async () => {
     await loadingPageProduct();
@@ -47,14 +46,10 @@ const productDisplay = async () => {
         document
             .getElementById("colors")
             .innerHTML += `<option value="${productColors}">${productColors}</option>`
-
-
     }
 
     addBasket(productData);
-
 };
-
 
 productDisplay();
 
@@ -69,21 +64,27 @@ const addBasket = () => {
         let quantity = document.getElementById("quantity");
 
         // condition if color and quantity  selected
-        if (select.value != "" &&
-            quantity != 0  &&
-            quantity.value > 0 &&
-            quantity.value < 100
-        ) {
+        if (select.value != "" && quantity != 0 &&
+            quantity.value > 0 && quantity.value <= 100) {
+
+            console.log("ajouter au panier")
 
             //new array of productData
-            const cart =  {
-                _id : productData._id,
+            const cart = {
+                _id: productData._id,
                 colors: select.value,
                 quantity: quantity.value,
             }
 
             // variable local storage
             let basket = JSON.parse(localStorage.getItem("basketClient"))
+
+            // get quantity in object cart
+            quantity.addEventListener('change', (e) => {
+                if(e.target.value != "" || e.target.value != 0){
+                    quantity = parseInt(e.target.value)
+                }
+            })
 
             // condition if basket contains nothing
             if (basket == null) {
@@ -105,6 +106,7 @@ const addBasket = () => {
                             (basket = JSON.parse(localStorage.getItem("basketClient")))
                         )
                     }
+
                 }
                 for (i = 0; i < basket.length; i++) {
                     if (basket[i]._id == productData._id &&
@@ -120,12 +122,13 @@ const addBasket = () => {
                     }
                 }
             }
+            //condition if colors and quantity not selected
+        } else {
+
+            alert("Veuillez saisir une couleur et une quantité comprise entre 1 et 100")
         }
-
     })
-
     return (basket = JSON.parse(localStorage.getItem("basketClient")))
-
 }
 
 
