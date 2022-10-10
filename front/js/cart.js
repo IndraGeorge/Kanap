@@ -8,7 +8,7 @@ if (cart == null) {
 } else {
 
   cart
-  console.log(cart)
+
 
   for (i = 0; i < cart.length; i++) {
 
@@ -16,10 +16,10 @@ if (cart == null) {
     let quantity = cart[i].quantity;
     let colors = cart[i].colors;
 
+
     fetch(`http://localhost:3000/api/products/${id}`)
       .then((res) => res.json())
       .then((data) => {
-
 
         let items = document.getElementById("cart__items");
 
@@ -56,5 +56,32 @@ if (cart == null) {
 
 }
 
+// total quantity
+let totalQuantity = document.getElementById("totalQuantity")
+
+const totalProducts = cart.reduce((acc, val) => acc + val.quantity, 0)
+
+totalQuantity.textContent = totalProducts
 
 
+// total price
+let totalPrice = document.getElementById("totalPrice")
+for (i = 0; i < cart.length; i++) {
+
+let id = cart[i]._id
+
+fetch(`http://localhost:3000/api/products/${id}`)
+      .then((res) => res.json())
+      .then((data) => {
+
+        let price = data.price
+        
+let total = data.price * totalQuantity
+
+console.log(total)
+
+totalPrice.textContent
+
+      })
+
+    }

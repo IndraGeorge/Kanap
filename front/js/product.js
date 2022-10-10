@@ -73,7 +73,7 @@ const addBasket = () => {
             const cart = {
                 _id: productData._id,
                 colors: select.value,
-                quantity: quantity.value,
+                quantity: parseFloat(quantity.value),
             }
 
             // variable local storage
