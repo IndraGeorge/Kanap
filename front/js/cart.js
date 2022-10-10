@@ -1,41 +1,43 @@
-//return the localStorage of cart in json
-const getItemsFromBasket = () => {
-  return (JSON.parse(localStorage.getItem("basketClient")))
-}
+let cart = JSON.parse(localStorage.getItem("basketClient"))
 
-let cart = getItemsFromBasket();
+// condition if there is nothing in local storage
+if (cart == null) {
 
-// Show products in cart 
-const cartDisplay = async () => {
+  console.log("Votre panier est vide")
 
-  if (cart.length > 0 ) {
+} else {
 
-    for (let products of cart) {
+  cart
+  console.log(cart)
 
-      await fetch(`http://localhost:3000/api/products/${products._id}`)
-        .then(res => res.json())
-        .then(data => {
+  for (i = 0; i < cart.length; i++) {
 
-          let image = data.imageUrl;
-          let name = data.name;
-          let price = data.price;
-          let total = price * products.quantity;
+    let id = cart[i]._id;
+    let quantity = cart[i].quantity;
+    let colors = cart[i].colors;
 
-            document.getElementById("cart__items").innerHTML +=
-              `<article class="cart__item" data-id="${products._id}" data-color="${products.colors}">
+    fetch(`http://localhost:3000/api/products/${id}`)
+      .then((res) => res.json())
+      .then((data) => {
+
+
+        let items = document.getElementById("cart__items");
+
+        items.innerHTML +=
+          `<article class="cart__item" data-id="${id}" data-color="${colors}">
                 <div class="cart__item__img">
-                  <img src="${image}" alt="Photographie d'un canapé">
+                  <img src="${data.imageUrl}" alt="Photographie d'un canapé">
                 </div>
                 <div class="cart__item__content">
                   <div class="cart__item__content__description">
-                    <h2>${name}</h2>
-                    <p>${products.colors}</p>
-                    <p>${price}</p>
+                    <h2>${data.name}</h2>
+                    <p>${colors}</p>
+                    <p>${data.price}€</p>
                   </div>
                   <div class="cart__item__content__settings">
                     <div class="cart__item__content__settings__quantity">
                       <p>Qté : </p>
-                      <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${products.quantity}">
+                      <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${quantity}">
                     </div>
                     <div class="cart__item__content__settings__delete">
                       <p class="deleteItem">Supprimer</p>
@@ -43,18 +45,16 @@ const cartDisplay = async () => {
                   </div>
                 </div>
               </article>`
-          
-        })
-        .catch(function (err) {
-          console.log("erreur")
-        })
-    }
-  } else {
 
-    console.log("Votre panier est vide :(");
+      })
+
+      .catch((err) => {
+        console.log("fetch err")
+      })
+
   }
 
-  return (localStorage.setItem("basketClient", JSON.stringify(cart)))
 }
 
-cartDisplay();
+
+
