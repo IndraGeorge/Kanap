@@ -9,30 +9,33 @@ if (cart == null) {
 
   cart
 
-
   for (i = 0; i < cart.length; i++) {
 
     let id = cart[i]._id;
     let quantity = cart[i].quantity;
     let colors = cart[i].colors;
 
-
-    fetch(`http://localhost:3000/api/products/${id}`)
+    let urlProducts = `http://localhost:3000/api/products/${id}`
+    fetch(urlProducts)
       .then((res) => res.json())
       .then((data) => {
+
+        let image = data.imageUrl
+        let name = data.name
+        let price = data.price * quantity
 
         let items = document.getElementById("cart__items");
 
         items.innerHTML +=
           `<article class="cart__item" data-id="${id}" data-color="${colors}">
                 <div class="cart__item__img">
-                  <img src="${data.imageUrl}" alt="Photographie d'un canapé">
+                  <img src="${image}" alt="Photographie d'un canapé">
                 </div>
                 <div class="cart__item__content">
                   <div class="cart__item__content__description">
-                    <h2>${data.name}</h2>
+                    <h2>${name}</h2>
                     <p>${colors}</p>
-                    <p>${data.price}€</p>
+                    <p>${price}€</p>
                   </div>
                   <div class="cart__item__content__settings">
                     <div class="cart__item__content__settings__quantity">
@@ -45,6 +48,7 @@ if (cart == null) {
                   </div>
                 </div>
               </article>`
+
 
       })
 
@@ -66,22 +70,31 @@ totalQuantity.textContent = totalProducts
 
 // total price
 let totalPrice = document.getElementById("totalPrice")
+
+let total = 0;
+
 for (i = 0; i < cart.length; i++) {
 
-let id = cart[i]._id
+  let id = cart[i]._id;
+  let quantity = cart[i].quantity
 
-fetch(`http://localhost:3000/api/products/${id}`)
-      .then((res) => res.json())
-      .then((data) => {
+  fetch(`http://localhost:3000/api/products/${id}`)
+    .then((res) => res.json())
+    .then((data) => {
 
-        let price = data.price
+      let price = data.price
         
-let total = data.price * totalQuantity
+          productsPrice = quantity * price
+          total += productsPrice 
+          let totalPrice = document.getElementById("totalPrice")
+          totalPrice.textContent = total
+         
+    })
 
-console.log(total)
+}
 
-totalPrice.textContent
+// increase and reduce quantity
 
-      })
+let itemQuantity = document.querySelector(".cart__item")
+console.log(itemQuantity)
 
-    }
