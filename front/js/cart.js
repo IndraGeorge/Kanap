@@ -20,7 +20,7 @@ const productsInLocalStorage = () => {
       fetch(`http://localhost:3000/api/products/${id}`)
         .then((res) => res.json())
         .then((data) => {
-          
+
           let image = data.imageUrl
           let name = data.name
           let price = data.price * quantity
@@ -50,7 +50,7 @@ const productsInLocalStorage = () => {
         </article>`
 
           plusQuantity(data);
-          
+
         })
 
     }
@@ -64,35 +64,46 @@ productsInLocalStorage()
 
 //total quantity
 
-let totalQuantity = document.getElementById("totalQuantity")
+function changeTotalQuantity() {
 
-const totalProducts = cart.reduce((acc, val) => acc + val.quantity, 0)
+  let totalQuantity = document.getElementById("totalQuantity")
 
-totalQuantity.textContent = totalProducts
+  const totalProducts = cart.reduce((acc, val) => acc + val.quantity, 0)
+
+  totalQuantity.textContent = totalProducts
+
+}
+
+changeTotalQuantity()
 
 // total price 
 
-let total = 0;
+function changeTotalPrice() {
 
-for (i = 0; i < cart.length; i++) {
+  let total = 0;
 
-  let id = cart[i]._id;
-  let quantity = cart[i].quantity
+  for (i = 0; i < cart.length; i++) {
 
-  fetch(`http://localhost:3000/api/products/${id}`)
-    .then((res) => res.json())
-    .then((data) => {
+    let id = cart[i]._id;
+    let quantity = cart[i].quantity
 
-      let price = data.price
+    fetch(`http://localhost:3000/api/products/${id}`)
+      .then((res) => res.json())
+      .then((data) => {
 
-      productsPrice = quantity * price
-      total += productsPrice
-      let totalPrice = document.getElementById("totalPrice")
-      totalPrice.textContent = total
+        let price = data.price
 
-    })
+        productsPrice = quantity * price
+        total += productsPrice
+        let totalPrice = document.getElementById("totalPrice")
+        totalPrice.textContent = total
 
+      })
+
+  }
 }
+
+changeTotalPrice()
 
 // Increase and reduce products
 
@@ -114,38 +125,32 @@ function plusQuantity() {
       for (i = 0; i < cart.length; i++) {
         let id = cart[i]._id
         let colors = cart[i].colors
-        let quantity = cart[i].quantity
 
-        if (id == article.dataset.id && colors == article.dataset.color) {
+        if ( inputQuantity > 0 && inputQuantity < 100 && Number.isInteger(inputQuantity)) {
 
-            quantity = inputQuantity
-            console.log("ajout panier"),
+        if (id == article.dataset.id && colors == article.dataset.color){
+
+          cart[i].quantity = inputQuantity
+          console.log("lsquantity", cart[i].quantity);
+          console.log("inputquantity", inputQuantity);
+          console.log("ajout panier"),
             localStorage.setItem("basketClient", JSON.stringify(cart)),
-            document.querySelectorAll(".itemQuantity")[i].textContent = quantity,
-            document.querySelectorAll("#totalPrice")[i].textContent = quantity * data.price
+            //document.querySelectorAll(".itemQuantity").textContent = cart[i].quantity,
             changeTotalQuantity()
-          
+            changeTotalPrice()
+
         }
 
+        } else {
+
+          alert ("Veuillez choisir une quantité comprise entre 1 et 100")
+
+        }
       }
 
     })
   })
 
 }
-
-// New total quantity
-
-function changeTotalQuantity() {
-
-  let totalQuantity = document.getElementById("totalQuantity")
-
-  const totalProducts = cart.reduce((acc, val) => acc + val.quantity, 0)
-
-  totalQuantity.textContent = totalProducts
-
-}
-
-
 
 
