@@ -1,7 +1,8 @@
 let cart = JSON.parse(localStorage.getItem("basketClient"))
 
-// condition if there is nothing in local storage
+//******************************************************************************************** */
 
+// condition if there is nothing in local storage
 const productsInLocalStorage = () => {
 
   if (cart == null) {
@@ -26,6 +27,7 @@ const productsInLocalStorage = () => {
           let price = data.price * quantity
 
           let items = document.querySelector("#cart__items")
+
           //Create article
           items.innerHTML += `<article class="cart__item" data-id="${id}" data-color="${colors}">
           <div class="cart__item__img">
@@ -49,7 +51,8 @@ const productsInLocalStorage = () => {
           </div>
         </article>`
 
-          plusQuantity(data);
+          moreQuantity();
+          deleteProduct();
 
         })
 
@@ -61,9 +64,9 @@ const productsInLocalStorage = () => {
 
 productsInLocalStorage()
 
+//********************************************************************************************* */
 
 //total quantity
-
 function changeTotalQuantity() {
 
   let totalQuantity = document.getElementById("totalQuantity")
@@ -76,8 +79,9 @@ function changeTotalQuantity() {
 
 changeTotalQuantity()
 
-// total price 
+//********************************************************************************************* */
 
+// total price 
 function changeTotalPrice() {
 
   let total = 0;
@@ -93,7 +97,7 @@ function changeTotalPrice() {
 
         let price = data.price
 
-        productsPrice = quantity * price
+        let productsPrice = quantity * price
         total += productsPrice
         let totalPrice = document.getElementById("totalPrice")
         totalPrice.textContent = total
@@ -105,10 +109,12 @@ function changeTotalPrice() {
 
 changeTotalPrice()
 
+//********************************************************************************************* */
+
 // Increase and reduce products
+function moreQuantity() {
 
-function plusQuantity() {
-
+  //input quantity
   let input = document.querySelectorAll(".itemQuantity")
 
   input.forEach((changeQuantity) => {
@@ -118,32 +124,45 @@ function plusQuantity() {
       inputQuantity = Number(changeQuantity.value);
       console.log(inputQuantity);
 
+      //parent's element
       let article = changeQuantity.closest("article");
-
       console.log(article);
 
       for (i = 0; i < cart.length; i++) {
         let id = cart[i]._id
         let colors = cart[i].colors
 
-        if ( inputQuantity > 0 && inputQuantity < 100 && Number.isInteger(inputQuantity)) {
+        //condition if the value is between 1 and 100 and if it is an integer
+        if (inputQuantity > 0 && inputQuantity < 100 && Number.isInteger(inputQuantity)) {
 
-        if (id == article.dataset.id && colors == article.dataset.color){
+          if (id == article.dataset.id && colors == article.dataset.color) {
 
-          cart[i].quantity = inputQuantity
-          console.log("lsquantity", cart[i].quantity);
-          console.log("inputquantity", inputQuantity);
-          console.log("ajout panier"),
-            localStorage.setItem("basketClient", JSON.stringify(cart)),
-            //document.querySelectorAll(".itemQuantity").textContent = cart[i].quantity,
-            changeTotalQuantity()
+            cart[i].quantity = inputQuantity
+            console.log("lsquantity", cart[i].quantity);
+            console.log("inputquantity", inputQuantity);
+            console.log("ajout panier"),
+              localStorage.setItem("basketClient", JSON.stringify(cart)),
+              changeTotalQuantity()
+
+            // Total price item
+            let priceItem = document.querySelectorAll(".cart__item__content__description p")[1]
+            
+            fetch(`http://localhost:3000/api/products/${id}`)
+              .then((res) => res.json())
+              .then((data) => {
+                
+                  let price = data.price * inputQuantity
+                  priceItem.textContent = `${price} €`
+                              
+              })
+
             changeTotalPrice()
 
-        }
+          }
 
         } else {
 
-          alert ("Veuillez choisir une quantité comprise entre 1 et 100")
+          alert("Veuillez choisir une quantité comprise entre 1 et 100")
 
         }
       }
@@ -153,4 +172,42 @@ function plusQuantity() {
 
 }
 
+//********************************************************************************************* */
 
+// Delete product
+const deleteProduct = () => {
+
+  let deleteItem = document.querySelectorAll(".deleteItem")
+
+  deleteItem.forEach(buttonDelete => {
+
+    buttonDelete.addEventListener("click", (e) => {
+      e.preventDefault()
+
+      console.log("delete product");
+
+      let article = buttonDelete.closest('article')
+      console.log(article);
+
+
+      cart = cart.filter(
+        element => {
+          return article.dataset.id !== element._id || article.dataset.color !== element.colors;
+
+        }
+      )
+
+      localStorage.setItem("basketClient", JSON.stringify(cart))
+      
+      // if there is nothing in the local storage, delete it
+      if (cart == null || cart == 0) {            
+      localStorage.removeItem("basketClient");
+
+      }
+    })
+
+  });
+
+}
+
+//window.addEventListener("load", initialization);

@@ -100,7 +100,7 @@ const addBasket = () => {
                         basket[i].colors == select.value
                     ) {
                         return (
-                            basket[i].quantity++,
+                            basket[i].quantity + quantity,
                             console.log("quantity++"),
                             localStorage.setItem("basketClient", JSON.stringify(basket)),
                             (basket = JSON.parse(localStorage.getItem("basketClient")))
