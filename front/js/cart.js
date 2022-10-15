@@ -102,8 +102,10 @@ function changeTotalPrice() {
         let totalPrice = document.getElementById("totalPrice")
         totalPrice.textContent = total
 
+        //let priceItem = document.querySelectorAll(".cart__item__content__description p")[1]
+          //priceItem.textContent = `${productsPrice} €`
+        
       })
-
   }
 }
 
@@ -116,17 +118,15 @@ function moreQuantity() {
 
   //input quantity
   let input = document.querySelectorAll(".itemQuantity")
-
+  
   input.forEach((changeQuantity) => {
 
     changeQuantity.addEventListener("change", (e) => {
 
       inputQuantity = Number(changeQuantity.value);
-      console.log(inputQuantity);
-
+      
       //parent's element
       let article = changeQuantity.closest("article");
-      console.log(article);
 
       for (i = 0; i < cart.length; i++) {
         let id = cart[i]._id
@@ -138,26 +138,10 @@ function moreQuantity() {
           if (id == article.dataset.id && colors == article.dataset.color) {
 
             cart[i].quantity = inputQuantity
-            console.log("lsquantity", cart[i].quantity);
-            console.log("inputquantity", inputQuantity);
             console.log("ajout panier"),
-              localStorage.setItem("basketClient", JSON.stringify(cart)),
-              changeTotalQuantity()
-
-            // Total price item
-            let priceItem = document.querySelectorAll(".cart__item__content__description p")[1]
-            
-            fetch(`http://localhost:3000/api/products/${id}`)
-              .then((res) => res.json())
-              .then((data) => {
-                
-                  let price = data.price * inputQuantity
-                  priceItem.textContent = `${price} €`
-                              
-              })
-
+              localStorage.setItem("basketClient", JSON.stringify(cart));
+            changeTotalQuantity()
             changeTotalPrice()
-
           }
 
         } else {
@@ -198,16 +182,18 @@ const deleteProduct = () => {
       )
 
       localStorage.setItem("basketClient", JSON.stringify(cart))
-      
+
       // if there is nothing in the local storage, delete it
-      if (cart == null || cart == 0) {            
-      localStorage.removeItem("basketClient");
+      if (cart == null || cart == 0) {
+        localStorage.removeItem("basketClient");
 
       }
+
+      document.location.reload();
+
     })
 
   });
 
 }
 
-//window.addEventListener("load", initialization);

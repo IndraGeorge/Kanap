@@ -81,7 +81,7 @@ const addBasket = () => {
 
             // get quantity in object cart
             quantity.addEventListener('change', (e) => {
-                if(e.target.value != "" || e.target.value != 0){
+                if (e.target.value != "" || e.target.value != 0) {
                     quantity = parseInt(e.target.value)
                 }
             })
@@ -96,12 +96,15 @@ const addBasket = () => {
                 // condition if basket contains items
             } else if (basket != null) {
                 for (i = 0; i < basket.length; i++) {
+
+                    let basketQuantity = basket[i].quantity
+
                     if (basket[i]._id == productData._id &&
                         basket[i].colors == select.value
                     ) {
                         return (
-                            basket[i].quantity + quantity,
-                            console.log("quantity++"),
+                            basket[i].quantity = Number(basketQuantity) + Number(cart.quantity),
+                            console.log(basketQuantity),
                             localStorage.setItem("basketClient", JSON.stringify(basket)),
                             (basket = JSON.parse(localStorage.getItem("basketClient")))
                         )
