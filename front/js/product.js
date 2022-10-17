@@ -3,7 +3,7 @@
 const id = new URLSearchParams(window.location.search).get("id");
 console.log(id);
 
-// fetch product 
+// On récupère les données des produits
 const loadingPageProduct = async () => {
     await fetch(`http://localhost:3000/api/products/${id}`)
         .then((res) => res.json())
@@ -11,15 +11,20 @@ const loadingPageProduct = async () => {
             productData = data
             return productData
         })
+
+        .catch((err) => {
+            console.log("fetch err")
+            // une erreur est survenue
+          })
 }
 
-// array product
+// Initialisation d'un tableau 
 let productData = [];
 
-// button add to cart
+// Bouton ajouter au panier
 let button = document.getElementById("addToCart");
 
-// page product containing details of product
+// Création de la page produit contenant les informations d'un article
 const productDisplay = async () => {
     await loadingPageProduct();
 
@@ -41,7 +46,7 @@ const productDisplay = async () => {
         .getElementById("description")
         .textContent += productData.description
 
-    // boucle colors
+    // Création d'une boucle pour ajouter les couleurs
     for (let productColors of productData.colors) {
         document
             .getElementById("colors")
@@ -53,47 +58,47 @@ const productDisplay = async () => {
 
 productDisplay();
 
-// add to cart 
-
+// On écoute le bouton ajouter au panier
 const addBasket = () => {
 
     button.addEventListener('click', () => {
 
-        // variable colors and quantity
+        // On pointe l'id "colors" et "quantity" de l'HTML
         let select = document.getElementById("colors");
         let quantity = document.getElementById("quantity");
 
-        // condition if color and quantity  selected
+        // Si une couleur et une quantité sont sélectionnés, on ajoute au panier
+        // Si la quantité choisit est supérieur à 0 et inférieur à 100, on ajoute au panier
         if (select.value != "" && quantity != 0 &&
             quantity.value > 0 && quantity.value <= 100) {
 
             console.log("ajouter au panier")
 
-            //new array of productData
+            //Initialisation d'un tableau pour le local storage
             const cart = {
                 _id: productData._id,
                 colors: select.value,
                 quantity: parseFloat(quantity.value),
             }
 
-            // variable local storage
+            // Initialisation du local storage
             let basket = JSON.parse(localStorage.getItem("basketClient"))
 
-            // get quantity in object cart
+            // On écoute le changement de quantité 
             quantity.addEventListener('change', (e) => {
                 if (e.target.value != "" || e.target.value != 0) {
                     quantity = parseInt(e.target.value)
                 }
             })
 
-            // condition if basket contains nothing
+            // Si il n'ya rien dans le local storage, on ajoute le tableau "cart"
             if (basket == null) {
                 basket = [];
                 basket.push(cart)
                 console.table(basket)
                 localStorage.setItem("basketClient", JSON.stringify(basket));
 
-                // condition if basket contains items
+                // Si un tableau est déjà présent et c'est le même produit, on incrémente la quantité
             } else if (basket != null) {
                 for (i = 0; i < basket.length; i++) {
 
@@ -111,6 +116,7 @@ const addBasket = () => {
                     }
 
                 }
+                // Si le produit a un id et une couleur différente,on ajoute un nouveau tableau
                 for (i = 0; i < basket.length; i++) {
                     if (basket[i]._id == productData._id &&
                         basket[i].colors != select.value ||
@@ -125,7 +131,7 @@ const addBasket = () => {
                     }
                 }
             }
-            //condition if colors and quantity not selected
+            
         } else {
 
             alert("Veuillez saisir une couleur et une quantité comprise entre 1 et 100")
