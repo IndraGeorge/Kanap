@@ -95,7 +95,7 @@ const addBasket = () => {
             if (basket == null) {
                 basket = [];
                 basket.push(cart)
-                console.table(basket)
+                //console.table(basket)
                 localStorage.setItem("basketClient", JSON.stringify(basket));
 
                 // Si un tableau est déjà présent et c'est le même produit, on incrémente la quantité
@@ -109,7 +109,7 @@ const addBasket = () => {
                     ) {
                         return (
                             basket[i].quantity = Number(basketQuantity) + Number(cart.quantity),
-                            console.log(basketQuantity),
+                            //console.log(basketQuantity),
                             localStorage.setItem("basketClient", JSON.stringify(basket)),
                             (basket = JSON.parse(localStorage.getItem("basketClient")))
                         )
@@ -123,7 +123,7 @@ const addBasket = () => {
                         basket[i]._id != productData._id
                     ) {
                         return (
-                            console.log("new"),
+                            //console.log("new"),
                             basket.push(cart),
                             localStorage.setItem("basketClient", JSON.stringify(basket)),
                             (basket = JSON.parse(localStorage.getItem("basketClient")))

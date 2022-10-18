@@ -9,7 +9,11 @@ const productsInLocalStorage = () => {
   if (cart == null) {
 
     console.log("Votre panier est vide")
-
+    let items = document.querySelector("#cart__items");
+    items.innerHTML = "<h3> Votre panier est vide </h3>";
+    items.style.textAlign = "center";
+    items.style.fontSize = "18px"
+    
   } else {
 
     for (i = 0; i < cart.length; i++) {
@@ -148,8 +152,8 @@ const moreQuantity = () => {
           if (id == article.dataset.id && colors == article.dataset.color) {
 
             cart[i].quantity = inputQuantity
-            console.log("ajout panier"),
-              localStorage.setItem("basketClient", JSON.stringify(cart));
+            //console.log("ajout panier"),
+            localStorage.setItem("basketClient", JSON.stringify(cart));
             changeTotalQuantity()
             changeTotalPrice()
           }
@@ -180,12 +184,11 @@ const deleteProduct = () => {
 
       // On remonte à l'élément parent
       let article = buttonDelete.closest('article')
-      
+
       // On filtre les produits ayant un id et une couleur différente
       cart = cart.filter(
         element => {
           return article.dataset.id !== element._id || article.dataset.color !== element.colors;
-
         }
       )
 
@@ -194,7 +197,6 @@ const deleteProduct = () => {
       // Si il y'a aucun produit dans le local storage, on supprime le tableau
       if (cart == null || cart == 0) {
         localStorage.removeItem("basketClient");
-
       }
       // On recharge la page après la suppression d'un produit
       document.location.reload();
@@ -210,9 +212,6 @@ const deleteProduct = () => {
 // Formulaire de contact
 
 // Initialisation des variables 
-
-// Balise form
-const form = document.querySelector(".cart__order__form")
 
 // Id prénom et message d'erreur
 const firstName = document.getElementById("firstName")
@@ -237,126 +236,157 @@ const emailErrorMsg = document.getElementById("emailErrorMsg")
 // Id bouton envoyer
 let buttonOrder = document.getElementById("order")
 
-// Création des expressions régulières pour contrôler les informatiosn entrées par l'utilisateur
-    let regexLeter = new RegExp ("^[\-a-zA-Zéèîëïäöüçâ]{3,30}$");
-    let regexLeterAndNumber = new RegExp ("^[0-9]{1,3} [a-zA-Zéèîëïäöüçâ.,-]{3,30}");
-    let regexEmail = new RegExp ("^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$")
+// Création des expressions régulières pour contrôler les informations entrées par l'utilisateur
+let regexLeter = new RegExp("^[\-a-zA-Zéèîëïäöüçâ ]{3,30}$");
+let regexLeterAndNumber = new RegExp("^[0-9]{1,3} [a-zA-Zéèîëïäöüçâ.,-]{3,30}");
+let regexEmail = new RegExp("^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$")
 
-  // Initialisation des variables pour récupérer les valeurs des inputs
+// Initialisation des variables pour récupérer les valeurs des inputs
 let firstNameValue, lastNameValue, addressValue, cityValue, emailValue;
 
-  // On écoute l'input firstName
-  firstName.addEventListener("change",() => {
+// On écoute l'input firstName
+firstName.addEventListener("change", () => {
 
-    firstNameValue = regexLeter.test(firstName.value)
+  firstNameValue = regexLeter.test(firstName.value)
+  
+  if (firstNameValue) {
 
-    if(firstNameValue){
+    //console.log(firstNameValue);
+    firstNameErrorMsg.innerHTML = ""
 
-      console.log(firstNameValue);
-      firstNameErrorMsg.innerHTML = ""
+  } else {
+    firstNameErrorMsg.innerHTML = "Veuillez renseigner votre prénom"
+  }
 
-    } else {
+})
 
-      firstNameErrorMsg.innerHTML = "Veuillez renseigner votre prénom"
-    }
+// On écoute l'input lastName
+lastName.addEventListener("change", () => {
 
-  })
+  lastNameValue = regexLeter.test(lastName.value)
 
-  // On écoute l'input lastName
-  lastName.addEventListener("change",() => {
+  if (lastNameValue) {
 
-    lastNameValue = regexLeter.test(lastName.value)
+    //console.log(lastNameValue);
+    lastNameErrorMsg.innerHTML = ""
 
-    if(lastNameValue){
+  } else {
+    lastNameErrorMsg.innerHTML = "Veuillez renseigner votre nom"
+  }
 
-      console.log(lastNameValue);
-      firstNameErrorMsg.innerHTML = ""
+})
 
-    } else {
-      
-      lastNameErrorMsg.innerHTML = "Veuillez renseigner votre nom"
-    }
+// On écoute l'input address
+address.addEventListener("change", () => {
 
-  })
+  addressValue = regexLeterAndNumber.test(address.value)
 
-  address.addEventListener("change",() => {
+  if (addressValue) {
 
-    addressValue = regexLeterAndNumber.test(address.value)
+    //console.log(addressValue);
+    addressErrorMsg.innerHTML = ""
 
-    if(addressValue){
+  } else {
+    addressErrorMsg.innerHTML = "Veuillez renseigner votre addresse"
+  }
 
-      console.log(addressValue);
-      addressErrorMsg.innerHTML = ""
+})
 
-    } else {
-      
-      addressErrorMsg.innerHTML = "Veuillez renseigner votre addresse"
-    }
+// On écoute l'input city
+city.addEventListener("change", () => {
 
-  })
+  cityValue = regexLeter.test(city.value)
 
-  city.addEventListener("change",() => {
+  if (cityValue) {
 
-    cityValue = regexLeter.test(city.value)
+    //console.log(cityValue);
+    cityErrorMsg.innerHTML = ""
 
-    if(cityValue){
+  } else {
+    cityErrorMsg.innerHTML = "Veuillez renseigner la ville"
+  }
 
-      console.log(cityValue);
-      cityErrorMsg.innerHTML = ""
+})
 
-    } else {
-      
-      cityErrorMsg.innerHTML = "Veuillez renseigner la ville"
-    }
+// On écoute l'input email
+email.addEventListener("change", () => {
 
-  })
+  emailValue = regexEmail.test(email.value)
 
-  email.addEventListener("change",() => {
+  if (emailValue) {
 
-    emailValue = regexEmail.test(email.value)
+    //console.log(emailValue);
+    addressErrorMsg.innerHTML = ""
 
-    if(emailValue){
+  } else {
+    emailErrorMsg.innerHTML = "Veuillez renseigner votre email"
+  }
 
-      console.log(emailValue);
-      addressErrorMsg.innerHTML = ""
-
-    } else {
-      
-      emailErrorMsg.innerHTML = "Veuillez renseigner votre email"
-    }
-
-  })
-
-    // Création d'un tableau contenant les informations renseignées par l'utilisateur
-    const contact = {
-
-      firstName : firstName.value,
-      lastName : lastName.value,
-      address : address.value,
-      city : city.value,
-      email: email.value
-    }
-
-
-
+})
 
 // Si le panier est vide, on invite l'utilisateur à ajouter des produits dans son panier
 // Si le panier n'est pas vide et les champs du formulaire sont correctement renseignés, on valide la commande
+buttonOrder.addEventListener("click", (e) => {
+  e.preventDefault()
 
-const sendForm = () => {
+  if (cart == null || cart == 0) {
+    alert("Veuillez ajouter des produits dans votre panier")
+  }
+  else {
 
+    if (firstNameValue && lastNameValue && addressValue && cityValue && emailValue) {
+      console.log("envoie")
+      const order = JSON.parse(localStorage.getItem("basketClient"))
+      let orderId = []
 
-  buttonOrder.addEventListener("click", (e) => {
-    e.preventDefault
+      order.forEach((products) => {
+        orderId.push(products._id);
+      })
+      //console.log(orderId)
 
-    if (cart == null) {
+      // Création d'un tableau contenant les informations renseignées par l'utilisateur 
+      const contact = {
+        contact: {
+          firstName: firstName.value,
+          lastName: lastName.value,
+          address: address.value,
+          city: city.value,
+          email: email.value
+        },
+        products: orderId,
+      };
 
-      alert("Veuillez ajouter des produits dans votre panier")
+      //console.log(contact);
+      // On envoie les données stockées dans contact au serveur 
+      const response = {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(contact),
+      };
+
+      fetch("http://localhost:3000/api/products/order", response)
+        .then((res) => res.json())
+        .then((data) => {
+          //console.log(data);
+
+          // On redirige l'utilisateur vers la page de confirmation avec son numéro de commande
+          document.location.href = `confirmation.html?orderId=${data.orderId}`
+        })
+
+        .catch((err) => {
+          console.log(err);
+          alert("Une erreur est survenue lors de l'envoi du formulaire")
+        })
+
+        localStorage.removeItem("basketClient");
+
+    } else {
+      alert("Veuillez remplir tout les champs du formulaire correctement")
 
     }
+  }
+})
 
-  })
+// Fin de l'écoute
 
-}
 
-sendForm()
