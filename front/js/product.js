@@ -64,8 +64,15 @@ const addBasket = () => {
 
     button.addEventListener('click', () => {
 
-        // On pointe l'id "colors" et "quantity" 
+        // On pointe l'id "colors" 
         let select = document.getElementById("colors");
+
+        // Si une couleur est sélectionner de nouveau, on affiche sur le bouton "Ajouter au panier"
+        select.addEventListener('click', () =>{
+            button.textContent = "Ajouter au panier"
+        })
+        
+        // On pointe l'id "quantity"
         let quantity = document.getElementById("quantity");
 
         // Si une couleur et une quantité sont sélectionnées, on ajoute au panier
@@ -74,7 +81,7 @@ const addBasket = () => {
             quantity.value > 0 && quantity.value <= 100) {
 
             console.log("ajouter au panier")
-
+            
             // Initialisation d'un tableau pour le local storage
             const cart = {
                 _id: productData._id,
@@ -89,6 +96,7 @@ const addBasket = () => {
             quantity.addEventListener('change', (e) => {
                 if (e.target.value != "" || e.target.value != 0) {
                     quantity = parseInt(e.target.value)
+                    button.textContent = "Ajouter au panier"
                 }
             })
 
@@ -96,7 +104,8 @@ const addBasket = () => {
             if (basket == null) {
                 basket = [];
                 basket.push(cart)
-                //console.table(basket)
+                //console.log(basket)
+                button.textContent = "Produit ajouté !" 
                 localStorage.setItem("basketClient", JSON.stringify(basket));
 
                 // Si un tableau est déjà présent et c'est le même produit, on incrémente la quantité
@@ -111,6 +120,7 @@ const addBasket = () => {
                         return (
                             basket[i].quantity = Number(basketQuantity) + Number(cart.quantity),
                             //console.log(basket[i].quantity),
+                            button.textContent = "Produit ajouté !",
                             localStorage.setItem("basketClient", JSON.stringify(basket)),
                             (basket = JSON.parse(localStorage.getItem("basketClient")))
                         )
@@ -125,6 +135,7 @@ const addBasket = () => {
                     ) {
                         return (
                             //console.log("new"),
+                            button.textContent = "Produit ajouté !",
                             basket.push(cart),
                             localStorage.setItem("basketClient", JSON.stringify(basket)),
                             (basket = JSON.parse(localStorage.getItem("basketClient")))

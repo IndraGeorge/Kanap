@@ -99,12 +99,12 @@ const changeTotalPrice = () => {
   if (cart != null) {
 
     let total = 0;
-
+    
     for (i = 0; i < cart.length; i++) {
 
       let id = cart[i]._id;
       let quantity = cart[i].quantity
-
+  
       fetch(`http://localhost:3000/api/products/${id}`)
         .then((res) => res.json())
         .then((data) => {
@@ -115,10 +115,6 @@ const changeTotalPrice = () => {
           total += productsPrice
           let totalPrice = document.getElementById("totalPrice")
           totalPrice.textContent = total
-
-          let priceItem = document.querySelectorAll(".cart__item__content__description p")[1]
-          priceItem.textContent = `${productsPrice} €`
-          console.log(priceItem);
 
         })
     }
@@ -136,7 +132,7 @@ const moreQuantity = () => {
 
   input.forEach((changeQuantity) => {
 
-    // On écoute l'input ".itemQuantity"
+    // On écoute l'input "itemQuantity"
     changeQuantity.addEventListener("change", (e) => {
 
       inputQuantity = Number(changeQuantity.value);
