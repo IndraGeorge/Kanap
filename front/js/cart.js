@@ -33,7 +33,7 @@ const productsInLocalStorage = () => {
 
           let items = document.querySelector("#cart__items")
 
-          //Création de l'article
+          // Création de l'article
           items.innerHTML += `<article class="cart__item" data-id="${id}" data-color="${colors}">
           <div class="cart__item__img">
             <img src="${image}" alt="Photographie d'un canapé">
@@ -63,7 +63,8 @@ const productsInLocalStorage = () => {
 
         .catch((err) => {
           console.log("fetch err")
-          // une erreur est survenue
+          alert("Une erreur est survenue lors du chargement du panier")
+          // Une erreur est survenue
         })
 
     }
@@ -115,8 +116,9 @@ const changeTotalPrice = () => {
           let totalPrice = document.getElementById("totalPrice")
           totalPrice.textContent = total
 
-          //let priceItem = document.querySelectorAll(".cart__item__content__description p")[1]
-          //priceItem.textContent = `${productsPrice} €`
+          let priceItem = document.querySelectorAll(".cart__item__content__description p")[1]
+          priceItem.textContent = `${productsPrice} €`
+          console.log(priceItem);
 
         })
     }
@@ -130,23 +132,23 @@ changeTotalPrice()
 // Ajouter ou supprimer des quantités 
 const moreQuantity = () => {
 
-  //Input quantité
   let input = document.querySelectorAll(".itemQuantity")
 
   input.forEach((changeQuantity) => {
 
+    // On écoute l'input ".itemQuantity"
     changeQuantity.addEventListener("change", (e) => {
 
       inputQuantity = Number(changeQuantity.value);
 
-      //On remonte à l'élément parent
+      // On remonte à l'élément parent
       let article = changeQuantity.closest("article");
 
       for (i = 0; i < cart.length; i++) {
         let id = cart[i]._id
         let colors = cart[i].colors
 
-        //Si la veleur saisit est supérieur à 0 ou inférieur à 100 et c'est un nombre entier, on ajoute au panier
+        // Si la veleur saisit est supérieure à 0 ou inférieur à 100 et c'est un nombre entier, on ajoute au panier
         if (inputQuantity > 0 && inputQuantity < 100 && Number.isInteger(inputQuantity)) {
 
           if (id == article.dataset.id && colors == article.dataset.color) {
@@ -194,13 +196,12 @@ const deleteProduct = () => {
 
       localStorage.setItem("basketClient", JSON.stringify(cart))
 
-      // Si il y'a aucun produit dans le local storage, on supprime le tableau
+      // S'il y a aucun produit dans le local storage, on supprime le tableau
       if (cart == null || cart == 0) {
         localStorage.removeItem("basketClient");
       }
       // On recharge la page après la suppression d'un produit
       document.location.reload();
-
     })
 
   });
@@ -244,7 +245,7 @@ let regexEmail = new RegExp("^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,
 // Initialisation des variables pour récupérer les valeurs des inputs
 let firstNameValue, lastNameValue, addressValue, cityValue, emailValue;
 
-// On écoute l'input firstName
+// On écoute l'input "firstName"
 firstName.addEventListener("change", () => {
 
   firstNameValue = regexLeter.test(firstName.value)
@@ -260,7 +261,7 @@ firstName.addEventListener("change", () => {
 
 })
 
-// On écoute l'input lastName
+// On écoute l'input "lastName"
 lastName.addEventListener("change", () => {
 
   lastNameValue = regexLeter.test(lastName.value)
@@ -276,7 +277,7 @@ lastName.addEventListener("change", () => {
 
 })
 
-// On écoute l'input address
+// On écoute l'input "address"
 address.addEventListener("change", () => {
 
   addressValue = regexLeterAndNumber.test(address.value)
@@ -292,7 +293,7 @@ address.addEventListener("change", () => {
 
 })
 
-// On écoute l'input city
+// On écoute l'input "city"
 city.addEventListener("change", () => {
 
   cityValue = regexLeter.test(city.value)
@@ -308,7 +309,7 @@ city.addEventListener("change", () => {
 
 })
 
-// On écoute l'input email
+// On écoute l'input "email"
 email.addEventListener("change", () => {
 
   emailValue = regexEmail.test(email.value)
@@ -326,6 +327,7 @@ email.addEventListener("change", () => {
 
 // Si le panier est vide, on invite l'utilisateur à ajouter des produits dans son panier
 // Si le panier n'est pas vide et les champs du formulaire sont correctement renseignés, on valide la commande
+// On écoute le bouton commander
 buttonOrder.addEventListener("click", (e) => {
   e.preventDefault()
 

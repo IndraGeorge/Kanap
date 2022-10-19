@@ -1,5 +1,4 @@
-// call API with Fetch
-
+// Appel de l'API avec la méthode fetch
 let products = [];
 async function loadingPageHome() {
   await fetch("http://localhost:3000/api/products ")
@@ -12,14 +11,13 @@ async function loadingPageHome() {
 
     .catch((err) => {
       console.log("fetch err")
-      // une erreur est survenue
+      // Une erreur est survenue
       document.getElementById("items").innerHTML += "Nos produits sont indisponibles pour le moment"
     })
 }
 
 
-// home page containing API products
-
+// Récupération des données pour l'afficher sur la page d'accueil
 const productsDisplay = async () => {
   await loadingPageHome();
 
@@ -36,7 +34,6 @@ const productsDisplay = async () => {
   }
 
 }
-
 
 productsDisplay();
 

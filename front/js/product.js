@@ -1,9 +1,9 @@
 
-// Url SearchParams
+// On récupère l'id du produit pour afficher un seul produit
 const id = new URLSearchParams(window.location.search).get("id");
 console.log(id);
 
-// On récupère les données des produits
+// On récupère les données du produit
 const loadingPageProduct = async () => {
     await fetch(`http://localhost:3000/api/products/${id}`)
         .then((res) => res.json())
@@ -14,7 +14,8 @@ const loadingPageProduct = async () => {
 
         .catch((err) => {
             console.log("fetch err")
-            // une erreur est survenue
+            alert ("Une erreur est survenue,veuillez nous excuser du désagrément")
+            // Une erreur est survenue
           })
 }
 
@@ -63,18 +64,18 @@ const addBasket = () => {
 
     button.addEventListener('click', () => {
 
-        // On pointe l'id "colors" et "quantity" de l'HTML
+        // On pointe l'id "colors" et "quantity" 
         let select = document.getElementById("colors");
         let quantity = document.getElementById("quantity");
 
-        // Si une couleur et une quantité sont sélectionnés, on ajoute au panier
-        // Si la quantité choisit est supérieur à 0 et inférieur à 100, on ajoute au panier
+        // Si une couleur et une quantité sont sélectionnées, on ajoute au panier
+        // Si la quantité choisit est supérieure à 0 et inférieur à 100, on ajoute au panier
         if (select.value != "" && quantity != 0 &&
             quantity.value > 0 && quantity.value <= 100) {
 
             console.log("ajouter au panier")
 
-            //Initialisation d'un tableau pour le local storage
+            // Initialisation d'un tableau pour le local storage
             const cart = {
                 _id: productData._id,
                 colors: select.value,
@@ -91,7 +92,7 @@ const addBasket = () => {
                 }
             })
 
-            // Si il n'ya rien dans le local storage, on ajoute le tableau "cart"
+            // S'il n'y a rien dans le local storage, on ajoute le tableau "cart"
             if (basket == null) {
                 basket = [];
                 basket.push(cart)
@@ -109,14 +110,14 @@ const addBasket = () => {
                     ) {
                         return (
                             basket[i].quantity = Number(basketQuantity) + Number(cart.quantity),
-                            //console.log(basketQuantity),
+                            //console.log(basket[i].quantity),
                             localStorage.setItem("basketClient", JSON.stringify(basket)),
                             (basket = JSON.parse(localStorage.getItem("basketClient")))
                         )
                     }
 
                 }
-                // Si le produit a un id et une couleur différente,on ajoute un nouveau tableau
+                // Si le produit a un id et une couleur différente, on ajoute un nouveau tableau
                 for (i = 0; i < basket.length; i++) {
                     if (basket[i]._id == productData._id &&
                         basket[i].colors != select.value ||
@@ -139,6 +140,6 @@ const addBasket = () => {
     })
     return (basket = JSON.parse(localStorage.getItem("basketClient")))
 }
-
+// Fin de l'écoute
 
 
