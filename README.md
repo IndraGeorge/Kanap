@@ -1,4 +1,4 @@
-![cover](images/logo.png)
+![cover](https://github.com/IndraGeorge/Kanap/blob/develop/front/images/logo.png)
 
 # Kanap #
 
