@@ -1,4 +1,4 @@
-![cover](images/logo.png)
+
 
 # Kanap #
 
