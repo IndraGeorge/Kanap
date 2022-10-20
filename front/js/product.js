@@ -11,7 +11,6 @@ async function loadingPageProduct () {
             productData = data
             return productData
         })
-
         .catch((err) => {
             console.log("fetch err")
             alert ("Une erreur est survenue,veuillez nous excuser du désagrément")

@@ -22,7 +22,6 @@ function productsInLocalStorage () {
       let quantity = cart[i].quantity;
       let colors = cart[i].colors;
 
-
       fetch(`http://localhost:3000/api/products/${id}`)
         .then((res) => res.json())
         .then((data) => {
@@ -60,7 +59,6 @@ function productsInLocalStorage () {
           deleteProduct();
 
         })
-
         .catch((err) => {
           console.log("fetch err")
           alert("Une erreur est survenue lors du chargement du panier");
@@ -157,9 +155,7 @@ function moreQuantity () {
           }
 
         } else {
-
           alert("Veuillez choisir une quantité comprise entre 1 et 100");
-
         }
       }
 
@@ -189,7 +185,6 @@ function deleteProduct () {
           return article.dataset.id !== element._id || article.dataset.color !== element.colors;
         }
       )
-
       localStorage.setItem("basketClient", JSON.stringify(cart))
 
       // S'il y a aucun produit dans le local storage, on supprime le tableau
@@ -210,27 +205,27 @@ function deleteProduct () {
 
 // Initialisation des variables 
 
-// Id prénom et message d'erreur
+// Prénom et message d'erreur
 const firstName = document.getElementById("firstName")
 const firstNameErrorMsg = document.getElementById("firstNameErrorMsg")
 
-// Id nom et message d'erreur
+// Nom et message d'erreur
 const lastName = document.getElementById("lastName")
 const lastNameErrorMsg = document.getElementById("lastNameErrorMsg")
 
-// Id adresse et message d'erreur
+// Adresse et message d'erreur
 const address = document.getElementById("address")
 const addressErrorMsg = document.getElementById("addressErrorMsg")
 
-// Id ville et message d'erreur
+// Ville et message d'erreur
 const city = document.getElementById("city")
 const cityErrorMsg = document.getElementById("cityErrorMsg")
 
-// Id email et message d'erreur
+// Email et message d'erreur
 const email = document.getElementById("email")
 const emailErrorMsg = document.getElementById("emailErrorMsg")
 
-// Id bouton envoyer
+// Id bouton commander
 let buttonOrder = document.getElementById("order")
 
 // Création des expressions régulières pour contrôler les informations entrées par l'utilisateur
