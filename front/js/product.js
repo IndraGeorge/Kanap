@@ -4,7 +4,7 @@ const id = new URLSearchParams(window.location.search).get("id");
 console.log(id);
 
 // On récupère les données du produit
-const loadingPageProduct = async () => {
+async function loadingPageProduct () {
     await fetch(`http://localhost:3000/api/products/${id}`)
         .then((res) => res.json())
         .then((data) => {
@@ -62,13 +62,13 @@ productDisplay();
 // On écoute le bouton ajouter au panier
 const addBasket = () => {
 
-    button.addEventListener('click', () => {
+    button.addEventListener("click", () => {
 
         // On pointe l'id "colors" 
         let select = document.getElementById("colors");
 
         // Si une couleur est sélectionner de nouveau, on affiche sur le bouton "Ajouter au panier"
-        select.addEventListener('click', () =>{
+        select.addEventListener("click", () =>{
             button.textContent = "Ajouter au panier"
         })
         
@@ -93,7 +93,7 @@ const addBasket = () => {
             let basket = JSON.parse(localStorage.getItem("basketClient"))
 
             // On écoute le changement de quantité 
-            quantity.addEventListener('change', (e) => {
+            quantity.addEventListener("change", (e) => {
                 if (e.target.value != "" || e.target.value != 0) {
                     quantity = parseInt(e.target.value)
                     button.textContent = "Ajouter au panier"

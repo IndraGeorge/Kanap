@@ -6,16 +6,13 @@ async function loadingPageHome() {
     .then((data) => {
       products = data;
       return products
-    }
-    )
-
+    })   
     .catch((err) => {
       console.log("fetch err")
       // Une erreur est survenue
-      document.getElementById("items").innerHTML += "Nos produits sont indisponibles pour le moment"
+      document.getElementById("items").innerHTML = "<h3> Nos produits sont indisponibles pour le moment </h3>"
     })
 }
-
 
 // Récupération des données pour l'afficher sur la page d'accueil
 const productsDisplay = async () => {
