@@ -4,7 +4,7 @@ let cart = JSON.parse(localStorage.getItem("basketClient"));
 //******************************************************************************************** */
 
 // Si le local storage est vide on affiche "panier vide" sinon on insère les données du produit
-function productsInLocalStorage () {
+function productsInLocalStorage() {
 
   if (cart == null) {
 
@@ -13,7 +13,7 @@ function productsInLocalStorage () {
     items.innerHTML = "<h3> Votre panier est vide </h3>";
     items.style.textAlign = "center";
     items.style.fontSize = "18px";
-    
+
   } else {
 
     for (i = 0; i < cart.length; i++) {
@@ -28,32 +28,89 @@ function productsInLocalStorage () {
 
           let image = data.imageUrl;
           let name = data.name;
-          let price = data.price * quantity;
+          let price = data.price;
+          let altTxt = data.altTxt
 
           let items = document.querySelector("#cart__items")
 
           // Création de l'article
-          items.innerHTML += `<article class="cart__item" data-id="${id}" data-color="${colors}">
-          <div class="cart__item__img">
-            <img src="${image}" alt="Photographie d'un canapé">
-          </div>
-          <div class="cart__item__content">
-            <div class="cart__item__content__description">
-              <h2>${name}</h2>
-              <p>${colors}</p>
-              <p>${price}€</p>
-            </div>
-            <div class="cart__item__content__settings">
-              <div class="cart__item__content__settings__quantity">
-                <p>Qté : </p>
-                <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${quantity}">
-              </div>
-              <div class="cart__item__content__settings__delete">
-                <p class="deleteItem">Supprimer</p>
-              </div>
-            </div>
-          </div>
-        </article>`;
+          let article = document.createElement('article');
+          article.setAttribute("class", "cart__item");
+          article.setAttribute("data-id", id);
+          article.setAttribute("data-color", colors);
+          items.appendChild(article);
+
+          // Création de la div ayant pour classe cart__item__img
+          let divImg = document.createElement('div');
+          divImg.setAttribute("class", "cart__item__img");
+          article.appendChild(divImg);
+
+          // Création de la balise image
+          let img = document.createElement('img');
+          img.setAttribute("src", image);
+          img.setAttribute("alt", altTxt);
+          divImg.appendChild(img);
+
+          // Création de la div ayant pour classe cart__item__content
+          let divContent = document.createElement('div');
+          divContent.setAttribute("class", "cart__item__content");
+          article.appendChild(divContent);
+
+          // Création de la div ayant pour classe cart__item__content__description
+          let divContentDescription = document.createElement('div');
+          divContentDescription.setAttribute("class", "cart__item__content__description");
+          divContent.appendChild(divContentDescription);
+
+          // Création d'une balise titre h2 qui indique le nom
+          let h2 = document.createElement('h2');
+          h2.textContent = name;
+          divContentDescription.appendChild(h2);
+
+          // Création d'une balise p qui indique la couleur
+          let color = document.createElement('p');
+          color.textContent = colors;
+          divContentDescription.appendChild(color);
+
+          // Création d'une balise p qui indique le prix 
+          let priceP = document.createElement('p');
+          priceP.textContent = price + " €";
+          divContentDescription.appendChild(priceP);
+
+          // Création de la div ayant pour classe cart__item__content__settings
+          let divContentSettings = document.createElement('div');
+          divContentSettings.setAttribute("class", "cart__item__content__settings");
+          divContent.appendChild(divContentSettings);
+
+          // Création de la div ayant pour classe cart__item__content__settings__quantity
+          let divContentSettingsQuantity = document.createElement('div');
+          divContentSettingsQuantity.setAttribute("class", "cart__item__content__settings__quantity");
+          divContentSettings.appendChild(divContentSettingsQuantity);
+
+          // Création d'une balise p qui indique le texte "Qté"
+          let quantityP = document.createElement('p');
+          quantityP.textContent = "Qté :";
+          divContentSettingsQuantity.appendChild(quantityP);
+
+          // Création d'une balise input ayant pour classe "itemQuantity" 
+          let inputQuantity = document.createElement('input');
+          inputQuantity.setAttribute("type", "number");
+          inputQuantity.setAttribute("class", "itemQuantity");
+          inputQuantity.setAttribute("name", "itemQuantity");
+          inputQuantity.setAttribute("min", "1");
+          inputQuantity.setAttribute("max", "100");
+          inputQuantity.setAttribute("value", quantity);
+          divContentSettingsQuantity.appendChild(inputQuantity);
+
+          // Création de la div ayant pour classe cart__item__content__settings__delete
+          let divContentSettingsDelete = document.createElement('div');
+          divContentSettingsDelete.setAttribute("class", "cart__item__content__settings__delete");
+          divContentSettings.appendChild(divContentSettingsDelete);
+
+          // Création d'une balise p qui indique le prix 
+          let deleteP = document.createElement('p');
+          deleteP.setAttribute("class", "deleteItem");
+          deleteP.innerText = "Supprimer";
+          divContentSettingsDelete.appendChild(deleteP);
 
           moreQuantity();
           deleteProduct();
@@ -76,7 +133,7 @@ productsInLocalStorage();
 //********************************************************************************************* */
 
 // Calcul de la quantité total présent dans le panier
-function changeTotalQuantity () {
+function changeTotalQuantity() {
 
   if (cart != null) {
 
@@ -92,17 +149,17 @@ changeTotalQuantity();
 //********************************************************************************************* */
 
 // Calcul du prix total du panier
-function changeTotalPrice () {
+function changeTotalPrice() {
 
   if (cart != null) {
 
     let total = 0;
-    
+
     for (i = 0; i < cart.length; i++) {
 
       let id = cart[i]._id;
       let quantity = cart[i].quantity;
-  
+
       fetch(`http://localhost:3000/api/products/${id}`)
         .then((res) => res.json())
         .then((data) => {
@@ -124,7 +181,7 @@ changeTotalPrice();
 //********************************************************************************************* */
 
 // Ajouter ou supprimer des quantités 
-function moreQuantity () {
+function moreQuantity() {
 
   let input = document.querySelectorAll(".itemQuantity");
 
@@ -167,7 +224,7 @@ function moreQuantity () {
 //********************************************************************************************* */
 
 // Supprimer un produit dans le DOM et dans le local storage
-function deleteProduct () {
+function deleteProduct() {
 
   let deleteItem = document.querySelectorAll(".deleteItem");
 
@@ -230,7 +287,7 @@ let buttonOrder = document.getElementById("order")
 
 // Création des expressions régulières pour contrôler les informations entrées par l'utilisateur
 let regexLeter = new RegExp("^[\-a-zA-Zéèîëïäöüçâ ]{3,30}$");
-let regexLeterAndNumber = new RegExp("^[0-9]{1,3} [a-zA-Zéèîëïäöüçâ.,-]{3,30}");
+let regexLeterAndNumber = new RegExp("^[a-zA-Z0-9éèîëïäöüçâ .,-]{3,50}$");
 let regexEmail = new RegExp("^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$")
 
 // Initialisation des variables pour récupérer les valeurs des inputs
@@ -240,14 +297,15 @@ let firstNameValue, lastNameValue, addressValue, cityValue, emailValue;
 firstName.addEventListener("change", () => {
 
   firstNameValue = regexLeter.test(firstName.value)
-  
+
   if (firstNameValue) {
 
     //console.log(firstNameValue);
     firstNameErrorMsg.innerHTML = ""
 
   } else {
-    firstNameErrorMsg.innerHTML = "Veuillez renseigner votre prénom"
+    firstNameErrorMsg.innerHTML = 
+    "Veuillez renseigner votre prénom avec au minmum 3 caractères sans chiffres"
   }
 
 })
@@ -263,7 +321,8 @@ lastName.addEventListener("change", () => {
     lastNameErrorMsg.innerHTML = ""
 
   } else {
-    lastNameErrorMsg.innerHTML = "Veuillez renseigner votre nom"
+    lastNameErrorMsg.innerHTML = 
+    "Veuillez renseigner votre nom avec au minmum 3 caractères sans chiffres"
   }
 
 })
@@ -279,7 +338,8 @@ address.addEventListener("change", () => {
     addressErrorMsg.innerHTML = ""
 
   } else {
-    addressErrorMsg.innerHTML = "Veuillez renseigner votre addresse"
+    addressErrorMsg.innerHTML = 
+    "Votre adresse doit contenir au minimum 3 caractères et maximum 50 caractères"
   }
 
 })
@@ -295,7 +355,8 @@ city.addEventListener("change", () => {
     cityErrorMsg.innerHTML = ""
 
   } else {
-    cityErrorMsg.innerHTML = "Veuillez renseigner la ville"
+    cityErrorMsg.innerHTML = 
+    "Veuillez renseigner le nom de votre ville sans chiffres avec au minimum 3 caractères"
   }
 
 })
@@ -311,7 +372,7 @@ email.addEventListener("change", () => {
     addressErrorMsg.innerHTML = ""
 
   } else {
-    emailErrorMsg.innerHTML = "Veuillez renseigner votre email"
+    emailErrorMsg.innerHTML = "Veuillez renseigner une adresse mail conforme"
   }
 
 })
@@ -371,7 +432,7 @@ buttonOrder.addEventListener("click", (e) => {
           alert("Une erreur est survenue lors de l'envoi du formulaire")
         })
 
-        localStorage.removeItem("basketClient");
+      localStorage.removeItem("basketClient");
 
     } else {
       alert("Veuillez remplir tout les champs du formulaire correctement")
