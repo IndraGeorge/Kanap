@@ -34,65 +34,65 @@ function productsInLocalStorage() {
           let items = document.querySelector("#cart__items")
 
           // Création de l'article
-          let article = document.createElement('article');
+          let article = document.createElement("article");
           article.setAttribute("class", "cart__item");
           article.setAttribute("data-id", id);
           article.setAttribute("data-color", colors);
           items.appendChild(article);
 
           // Création de la div ayant pour classe cart__item__img
-          let divImg = document.createElement('div');
+          let divImg = document.createElement("div");
           divImg.setAttribute("class", "cart__item__img");
           article.appendChild(divImg);
 
           // Création de la balise image
-          let img = document.createElement('img');
+          let img = document.createElement("img");
           img.setAttribute("src", image);
           img.setAttribute("alt", altTxt);
           divImg.appendChild(img);
 
           // Création de la div ayant pour classe cart__item__content
-          let divContent = document.createElement('div');
+          let divContent = document.createElement("div");
           divContent.setAttribute("class", "cart__item__content");
           article.appendChild(divContent);
 
           // Création de la div ayant pour classe cart__item__content__description
-          let divContentDescription = document.createElement('div');
+          let divContentDescription = document.createElement("div");
           divContentDescription.setAttribute("class", "cart__item__content__description");
           divContent.appendChild(divContentDescription);
 
           // Création d'une balise titre h2 qui indique le nom
-          let h2 = document.createElement('h2');
+          let h2 = document.createElement("h2");
           h2.textContent = name;
           divContentDescription.appendChild(h2);
 
           // Création d'une balise p qui indique la couleur
-          let color = document.createElement('p');
+          let color = document.createElement("p");
           color.textContent = colors;
           divContentDescription.appendChild(color);
 
           // Création d'une balise p qui indique le prix 
-          let priceP = document.createElement('p');
+          let priceP = document.createElement("p");
           priceP.textContent = price + " €";
           divContentDescription.appendChild(priceP);
 
           // Création de la div ayant pour classe cart__item__content__settings
-          let divContentSettings = document.createElement('div');
+          let divContentSettings = document.createElement("div");
           divContentSettings.setAttribute("class", "cart__item__content__settings");
           divContent.appendChild(divContentSettings);
 
           // Création de la div ayant pour classe cart__item__content__settings__quantity
-          let divContentSettingsQuantity = document.createElement('div');
+          let divContentSettingsQuantity = document.createElement("div");
           divContentSettingsQuantity.setAttribute("class", "cart__item__content__settings__quantity");
           divContentSettings.appendChild(divContentSettingsQuantity);
 
           // Création d'une balise p qui indique le texte "Qté"
-          let quantityP = document.createElement('p');
+          let quantityP = document.createElement("p");
           quantityP.textContent = "Qté :";
           divContentSettingsQuantity.appendChild(quantityP);
 
           // Création d'une balise input ayant pour classe "itemQuantity" 
-          let inputQuantity = document.createElement('input');
+          let inputQuantity = document.createElement("input");
           inputQuantity.setAttribute("type", "number");
           inputQuantity.setAttribute("class", "itemQuantity");
           inputQuantity.setAttribute("name", "itemQuantity");
@@ -102,12 +102,12 @@ function productsInLocalStorage() {
           divContentSettingsQuantity.appendChild(inputQuantity);
 
           // Création de la div ayant pour classe cart__item__content__settings__delete
-          let divContentSettingsDelete = document.createElement('div');
+          let divContentSettingsDelete = document.createElement("div");
           divContentSettingsDelete.setAttribute("class", "cart__item__content__settings__delete");
           divContentSettings.appendChild(divContentSettingsDelete);
 
           // Création d'une balise p qui indique le prix 
-          let deleteP = document.createElement('p');
+          let deleteP = document.createElement("p");
           deleteP.setAttribute("class", "deleteItem");
           deleteP.innerText = "Supprimer";
           divContentSettingsDelete.appendChild(deleteP);

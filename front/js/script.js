@@ -54,20 +54,3 @@ const productsDisplay = async () => {
 
 productsDisplay();
 
-
-// let article = document.createElement("items");
-//           article.setAttribute("class", "cart__item");
-//           article.setAttribute("data-id", id);
-//           article.setAttribute("data-color", colors);
-//           items.appendChild(article);
-
-
-          // document
-          // .getElementById("items")
-          // .innerHTML += `<a href="./product.html?id=${listProduct._id}">
-          //     <article>
-          //       <img src="${listProduct.imageUrl}" alt="${listProduct.altTxt}">
-          //       <h3 class="productName">${listProduct.name}</h3>
-          //       <p class="productDescription">${listProduct.description}</p>
-          //     </article>
-          //   </a>`
