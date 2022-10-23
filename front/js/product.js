@@ -21,9 +21,6 @@ async function loadingPageProduct () {
 // Initialisation d'un tableau 
 let productData = [];
 
-// Bouton ajouter au panier
-let button = document.getElementById("addToCart");
-
 // Création de la page produit contenant les informations
 const productDisplay = async () => {
     await loadingPageProduct();
@@ -64,6 +61,9 @@ const productDisplay = async () => {
 };
 
 productDisplay();
+
+// Bouton ajouter au panier
+let button = document.getElementById("addToCart");
 
 // On écoute le bouton ajouter au panier
 const addBasket = () => {
@@ -137,7 +137,7 @@ const addBasket = () => {
                     }
 
                 }
-                // Si le produit a un id et une couleur différente, on ajoute un nouveau tableau
+                // Si le produit a un id et/ou une couleur différente, on ajoute un nouveau tableau
                 for (i = 0; i < basket.length; i++) {
                     if (basket[i]._id == productData._id &&
                         basket[i].colors != select.value ||
@@ -157,7 +157,7 @@ const addBasket = () => {
             
         } else {
 
-            alert("Veuillez saisir une couleur et une quantité comprise entre 1 et 100")
+            alert("Veuillez saisir une couleur et une quantité supérieure à 0 et inférieure ou égale à 100")
         }
     })
     return (basket = JSON.parse(localStorage.getItem("basketClient")))
