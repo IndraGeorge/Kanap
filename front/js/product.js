@@ -117,7 +117,7 @@ const addBasket = () => {
                 button.style.color = "#00FF00" 
                 localStorage.setItem("basketClient", JSON.stringify(basket));
 
-                // Si un tableau est déjà présent et c'est le même produit, on incrémente la quantité
+                // Si un tableau est déjà présent et c'est le même produit, on augmente la quantité
             } else if (basket != null) {
                 for (i = 0; i < basket.length; i++) {
 
