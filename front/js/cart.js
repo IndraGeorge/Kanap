@@ -208,7 +208,7 @@ function moreQuantity() {
         let id = cart[i]._id;
         let colors = cart[i].colors;
 
-        // Si la veleur saisit est supérieure à 0 ou inférieur à 100 et c'est un nombre entier, on ajoute au panier
+        // Si la valeur saisit est supérieure à 0 où inférieur à 100 et c'est un nombre entier, on ajoute au panier
         if (inputQuantity > 0 && inputQuantity <= 100 && Number.isInteger(inputQuantity)) {
 
           if (id == article.dataset.id && colors == article.dataset.color) {
