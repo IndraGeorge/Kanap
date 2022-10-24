@@ -297,7 +297,7 @@ let buttonOrder = document.getElementById("order")
 // Création des expressions régulières pour contrôler les informations entrées par l'utilisateur
 let regexLeter = new RegExp("^[\-a-zA-Zéèîëïäöüçâ ]{3,30}$");
 let regexLeterAndNumber = new RegExp("^[a-zA-Z0-9éèîëïäöüçâ .,-]{3,50}$");
-let regexEmail = new RegExp("^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$")
+let regexEmail = new RegExp("^[_a-z0-9-]+(.[_a-z0-9-]+)*@[a-z0-9-]+(.[a-z]{2,4})$")
 
 // Initialisation des variables pour récupérer les valeurs des inputs
 let firstNameValue, lastNameValue, addressValue, cityValue, emailValue;
@@ -381,7 +381,8 @@ email.addEventListener("change", () => {
     addressErrorMsg.innerHTML = ""
 
   } else {
-    emailErrorMsg.innerHTML = "Merci d'entrer une adresse e-mail valide"
+    emailErrorMsg.innerHTML = 
+    "Merci d'entrer une adresse e-mail valide"
   }
 
 })
