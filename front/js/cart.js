@@ -208,7 +208,7 @@ function moreQuantity() {
         let id = cart[i]._id;
         let colors = cart[i].colors;
 
-        // Si la veleur saisit est supérieure à 0 ou inférieur à 100 et c'est un nombre entier, on ajoute au panier
+        // Si la valeur saisit est supérieure à 0 où inférieur à 100 et c'est un nombre entier, on ajoute au panier
         if (inputQuantity > 0 && inputQuantity <= 100 && Number.isInteger(inputQuantity)) {
 
           if (id == article.dataset.id && colors == article.dataset.color) {
@@ -297,7 +297,7 @@ let buttonOrder = document.getElementById("order")
 // Création des expressions régulières pour contrôler les informations entrées par l'utilisateur
 let regexLeter = new RegExp("^[\-a-zA-Zéèîëïäöüçâ ]{3,30}$");
 let regexLeterAndNumber = new RegExp("^[a-zA-Z0-9éèîëïäöüçâ .,-]{3,50}$");
-let regexEmail = new RegExp("^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$")
+let regexEmail = new RegExp("^[_a-z0-9-]+(.[_a-z0-9-]+)*@[a-z0-9-]+(.[a-z]{2,4})$")
 
 // Initialisation des variables pour récupérer les valeurs des inputs
 let firstNameValue, lastNameValue, addressValue, cityValue, emailValue;
@@ -381,7 +381,8 @@ email.addEventListener("change", () => {
     addressErrorMsg.innerHTML = ""
 
   } else {
-    emailErrorMsg.innerHTML = "Merci d'entrer une adresse e-mail valide"
+    emailErrorMsg.innerHTML = 
+    "Merci d'entrer une adresse e-mail valide"
   }
 
 })
