@@ -4,7 +4,7 @@ let cart = JSON.parse(localStorage.getItem("basketClient"));
 //******************************************************************************************** */
 
 // Si le local storage est vide on affiche "panier vide" sinon on insère les données du produit
-function productsInLocalStorage() {
+async function productsInLocalStorage() {
 
   if (cart == null) {
 
@@ -16,31 +16,37 @@ function productsInLocalStorage() {
 
   } else {
 
-    for (i = 0; i < cart.length; i++) {
+    await fetch("http://localhost:3000/api/products")
+      .then((res) => res.json())
+      .then((data) => {
 
-      let id = cart[i]._id;
-      let quantity = cart[i].quantity;
-      let colors = cart[i].colors;
+        // On récupère les données des produits présents dans le local storage
+        for (i = 0; i < cart.length; i++) {
 
-      fetch(`http://localhost:3000/api/products/${id}`)
-        .then((res) => res.json())
-        .then((data) => {
+          let id = cart[i]._id
+          let quantity = cart[i].quantity;
+          let colors = cart[i].colors;
 
-          let image = data.imageUrl;
-          let name = data.name;
-          let price = data.price;
-          let altTxt = data.altTxt
+          // On récupère que les produits qui correspondent à ceux présents dans le local storage
+          const dataCart = data.find((element) => element._id === id)
 
+          // Initialisation des variables des données de l'API
+          let price = dataCart.price
+          let image = dataCart.imageUrl;
+          let name = dataCart.name;
+          let altTxt = dataCart.altTxt
+
+          // On pointe l'id "cart__items" pour insérer le résumé du panier dans le DOM
           let items = document.querySelector("#cart__items")
 
-          // Création de l'article
+          // Création de l'article "cart__item"
           let article = document.createElement("article");
           article.setAttribute("class", "cart__item");
           article.setAttribute("data-id", id);
           article.setAttribute("data-color", colors);
           items.appendChild(article);
 
-          // Création de la div ayant pour classe cart__item__img
+          // Création de la div "cart__item__img"
           let divImg = document.createElement("div");
           divImg.setAttribute("class", "cart__item__img");
           article.appendChild(divImg);
@@ -51,12 +57,12 @@ function productsInLocalStorage() {
           img.setAttribute("alt", altTxt);
           divImg.appendChild(img);
 
-          // Création de la div ayant pour classe cart__item__content
+          // Création de la div "cart__item__content"
           let divContent = document.createElement("div");
           divContent.setAttribute("class", "cart__item__content");
           article.appendChild(divContent);
 
-          // Création de la div ayant pour classe cart__item__content__description
+          // Création de la div "cart__item__content__description"
           let divContentDescription = document.createElement("div");
           divContentDescription.setAttribute("class", "cart__item__content__description");
           divContent.appendChild(divContentDescription);
@@ -76,12 +82,12 @@ function productsInLocalStorage() {
           priceP.textContent = price + " €";
           divContentDescription.appendChild(priceP);
 
-          // Création de la div ayant pour classe cart__item__content__settings
+          // Création de la div "cart__item__content__settings"
           let divContentSettings = document.createElement("div");
           divContentSettings.setAttribute("class", "cart__item__content__settings");
           divContent.appendChild(divContentSettings);
 
-          // Création de la div ayant pour classe cart__item__content__settings__quantity
+          // Création de la div "cart__item__content__settings__quantity"
           let divContentSettingsQuantity = document.createElement("div");
           divContentSettingsQuantity.setAttribute("class", "cart__item__content__settings__quantity");
           divContentSettings.appendChild(divContentSettingsQuantity);
@@ -101,7 +107,7 @@ function productsInLocalStorage() {
           inputQuantity.setAttribute("value", quantity);
           divContentSettingsQuantity.appendChild(inputQuantity);
 
-          // Création de la div ayant pour classe cart__item__content__settings__delete
+          // Création de la div "cart__item__content__settings__delete"
           let divContentSettingsDelete = document.createElement("div");
           divContentSettingsDelete.setAttribute("class", "cart__item__content__settings__delete");
           divContentSettings.appendChild(divContentSettingsDelete);
@@ -114,15 +120,14 @@ function productsInLocalStorage() {
 
           moreQuantity();
           deleteProduct();
+        }
+      })
 
-        })
-        .catch((err) => {
-          console.log("fetch err")
-          alert("Une erreur est survenue lors du chargement du panier");
-          // Une erreur est survenue
-        });
-
-    }
+      .catch((err) => {
+        console.log("fetch err")
+        alert("Une erreur est survenue lors du chargement du panier");
+        // Une erreur est survenue
+      });
 
   }
 
@@ -149,30 +154,34 @@ changeTotalQuantity();
 //********************************************************************************************* */
 
 // Calcul du prix total du panier
-function changeTotalPrice() {
+async function changeTotalPrice() {
 
   if (cart != null) {
 
-    let total = 0;
+    await fetch("http://localhost:3000/api/products")
+      .then((res) => res.json())
+      .then((data) => {
 
-    for (i = 0; i < cart.length; i++) {
+        // On déclare une variable "total" avec une valeur de 0
+        let total = 0;
+        
+        // On récupère l'id et la quantité dans le local storage
+        for (i = 0; i < cart.length; i++) {
 
-      let id = cart[i]._id;
-      let quantity = cart[i].quantity;
-
-      fetch(`http://localhost:3000/api/products/${id}`)
-        .then((res) => res.json())
-        .then((data) => {
-
-          let price = data.price;
+          let id = cart[i]._id;
+          let quantity = cart[i].quantity;
+          
+          // On récupère que les données des produits présents dans le local storage
+          const dataCart = data.find((element) => element._id === id)
+          let price = dataCart.price;
 
           let productsPrice = quantity * price;
           total += productsPrice;
           let totalPrice = document.getElementById("totalPrice");
           totalPrice.textContent = total;
 
-        })
-    }
+        }
+      })
   }
 }
 
@@ -304,8 +313,8 @@ firstName.addEventListener("change", () => {
     firstNameErrorMsg.innerHTML = ""
 
   } else {
-    firstNameErrorMsg.innerHTML = 
-    "Veuillez renseigner votre prénom avec au minmum 3 caractères sans chiffres"
+    firstNameErrorMsg.innerHTML =
+      "Merci de saisir votre prénom sans chiffre ni caractères spéciaux"
   }
 
 })
@@ -321,8 +330,8 @@ lastName.addEventListener("change", () => {
     lastNameErrorMsg.innerHTML = ""
 
   } else {
-    lastNameErrorMsg.innerHTML = 
-    "Veuillez renseigner votre nom avec au minmum 3 caractères sans chiffres"
+    lastNameErrorMsg.innerHTML =
+      "Merci de saisir votre nom sans chiffre ni caractères spéciaux"
   }
 
 })
@@ -338,8 +347,8 @@ address.addEventListener("change", () => {
     addressErrorMsg.innerHTML = ""
 
   } else {
-    addressErrorMsg.innerHTML = 
-    "Votre adresse doit contenir au minimum 3 caractères et maximum 50 caractères"
+    addressErrorMsg.innerHTML =     
+      "Votre adresse doit contenir au moins 3 caractères et aux plus 50 caractères"
   }
 
 })
@@ -355,8 +364,8 @@ city.addEventListener("change", () => {
     cityErrorMsg.innerHTML = ""
 
   } else {
-    cityErrorMsg.innerHTML = 
-    "Veuillez renseigner le nom de votre ville sans chiffres avec au minimum 3 caractères"
+    cityErrorMsg.innerHTML =
+      "Merci d'indiquer le nom de votre ville sans chiffres ou caractères spéciaux"
   }
 
 })
@@ -372,7 +381,7 @@ email.addEventListener("change", () => {
     addressErrorMsg.innerHTML = ""
 
   } else {
-    emailErrorMsg.innerHTML = "Veuillez renseigner une adresse mail conforme"
+    emailErrorMsg.innerHTML = "Merci d'entrer une adresse e-mail valide"
   }
 
 })
@@ -435,12 +444,11 @@ buttonOrder.addEventListener("click", (e) => {
       localStorage.removeItem("basketClient");
 
     } else {
-      alert("Veuillez remplir tout les champs du formulaire correctement")
+      alert("Veuillez remplir tous les champs du formulaire correctement")
 
     }
   }
 })
-
 // Fin de l'écoute
 
 
