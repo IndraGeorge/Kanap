@@ -4,7 +4,7 @@ const id = new URLSearchParams(window.location.search).get("id");
 console.log(id);
 
 // On récupère les données du produit
-async function loadingPageProduct () {
+async function loadingPageProduct() {
     await fetch(`http://localhost:3000/api/products/${id}`)
         .then((res) => res.json())
         .then((data) => {
@@ -13,9 +13,9 @@ async function loadingPageProduct () {
         })
         .catch((err) => {
             console.log("fetch err")
-            alert ("Une erreur est survenue,veuillez nous excuser du désagrément")
+            alert("Une erreur est survenue,veuillez nous excuser du désagrément")
             // Une erreur est survenue
-          })
+        })
 }
 
 // Initialisation d'un tableau 
@@ -28,12 +28,12 @@ const productDisplay = async () => {
     document.title = productData.name
 
     // Création de la balise img
-    let itemImg = document.querySelector(".item__img")  
+    let itemImg = document.querySelector(".item__img")
     let img = document.createElement("img");
-          img.setAttribute("src",productData.imageUrl );
-          img.setAttribute("alt", productData.altTxt);
-          itemImg.appendChild(img);
-    
+    img.setAttribute("src", productData.imageUrl);
+    img.setAttribute("alt", productData.altTxt);
+    itemImg.appendChild(img);
+
     // Le nom du produit est ajouté
     document.getElementById("title")
         .textContent = productData.name
@@ -47,7 +47,7 @@ const productDisplay = async () => {
         .textContent = productData.description
 
     // Création d'une boucle pour ajouter les couleurs
-    for (let productColors of productData.colors) {     
+    for (let productColors of productData.colors) {
 
         let optionColors = document.getElementById("colors")
         optionColors.value.textContent += productColors
@@ -74,26 +74,26 @@ const addBasket = () => {
         let select = document.getElementById("colors");
 
         // Si une couleur est sélectionner de nouveau, on affiche sur le bouton "Ajouter au panier"
-        select.addEventListener("click", () =>{
+        select.addEventListener("click", () => {
             button.textContent = "Ajouter au panier"
             button.style.color = "white"
         })
-        
+
         // On pointe l'id "quantity"
         let quantity = document.getElementById("quantity");
-
+        let quantityValue = Number(quantity.value)
         // Si une couleur et une quantité sont sélectionnées, on ajoute au panier
         // Si la quantité choisit est supérieure à 0 et inférieur à 100, on ajoute au panier
         if (select.value != "" && quantity != 0 &&
-            quantity.value > 0 && quantity.value <= 100) {
+            quantityValue > 0 && quantityValue <= 100 && Number.isInteger(quantityValue)) {
 
             console.log("ajouter au panier")
-            
+
             // Initialisation d'un tableau pour le local storage
             const cart = {
                 _id: productData._id,
                 colors: select.value,
-                quantity: parseFloat(quantity.value),
+                quantity: quantityValue,
             }
 
             // Initialisation du local storage
@@ -114,7 +114,7 @@ const addBasket = () => {
                 basket.push(cart)
                 //console.log(basket)
                 button.textContent = "Produit ajouté"
-                button.style.color = "#00FF00" 
+                button.style.color = "#00FF00"
                 localStorage.setItem("basketClient", JSON.stringify(basket));
 
                 // Si un tableau est déjà présent et c'est le même produit, on augmente la quantité
@@ -122,20 +122,29 @@ const addBasket = () => {
                 for (i = 0; i < basket.length; i++) {
 
                     let basketQuantity = basket[i].quantity
+                    let sumQuantity = Number(basketQuantity) + Number(cart.quantity)
 
                     if (basket[i]._id == productData._id &&
                         basket[i].colors == select.value
                     ) {
+                        // On limite le nombre d'unité par produit à 100
+                        if (sumQuantity > 100 ){
+                        
+                            sumQuantity = 100
+                            alert ("Vous avez atteint un maximum de 100 unités pour chaque produit")
+                        }
+                                                                              
                         return (
-                            basket[i].quantity = Number(basketQuantity) + Number(cart.quantity),
-                            //console.log(basket[i].quantity),
+                            basket[i].quantity = sumQuantity,
+                            console.log(basket[i].quantity),
                             button.textContent = "Produit ajouté",
                             button.style.color = "#00FF00",
                             localStorage.setItem("basketClient", JSON.stringify(basket)),
                             (basket = JSON.parse(localStorage.getItem("basketClient")))
-                        )
-                    }
-
+                        ) 
+                                         
+                    } 
+                  
                 }
                 // Si le produit a un id et/ou une couleur différente, on ajoute un nouveau tableau
                 for (i = 0; i < basket.length; i++) {
@@ -154,7 +163,7 @@ const addBasket = () => {
                     }
                 }
             }
-            
+
         } else {
 
             alert("Veuillez saisir une couleur et une quantité supérieure à 0 et inférieure ou égale à 100")
